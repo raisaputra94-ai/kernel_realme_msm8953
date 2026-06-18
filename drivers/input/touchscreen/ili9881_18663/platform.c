@@ -417,7 +417,7 @@ static int ilitek_platform_notifier_fb(struct notifier_block *self, unsigned lon
 	 *  FB_EVENT_BLANK(0x09): A hardware display blank change occurred.
 	 *  FB_EARLY_EVENT_BLANK(0x10): A hardware display blank early change occurred.
 	 */
-	if (evdata && evdata->data &&  event == FB_EARLY_EVENT_BLANK) {
+	if (evdata && evdata->data && (event == FB_EARLY_EVENT_BLANK || event == FB_EVENT_BLANK)) {
 		blank = evdata->data;
 
 #if (TP_PLATFORM == PT_SPRD)
@@ -429,7 +429,7 @@ static int ilitek_platform_notifier_fb(struct notifier_block *self, unsigned lon
 			ipio_info("TP Suspend\n");
 
 			/*if (!core_firmware->isUpgrading) */{
-				//if (!core_config->isEnableGesture)
+				if (!core_config->isEnableGesture)
 					ilitek_platform_disable_irq();
 
 				if (ipd->isEnablePollCheckPower)
@@ -707,6 +707,7 @@ void ilitek_esd_gesture_reset(void)
 	  ipio_info("write command error\n");
 	}
 	core_fr->isEnableFR = true;
+	enable_irq_wake(ipd->isr_gpio);
 	ipio_info("esd gesture reset Done\n");
 
 }

@@ -1,0 +1,11 @@
+--- drivers/input/touchscreen/ili9881_18663/platform.c	2026-06-10 03:34:15.550149210 +0000
++++ drivers/input/touchscreen/ili9881_18663/platform.c	2026-06-10 03:34:15.562149210 +0000
+@@ -429,7 +429,7 @@
+ 			ipio_info("TP Suspend\n");
+ 
+ 			/*if (!core_firmware->isUpgrading) */{
+-				//if (!core_config->isEnableGesture)
++				if (!core_config->isEnableGesture)
+ 					ilitek_platform_disable_irq();
+ 
+ 				if (ipd->isEnablePollCheckPower)

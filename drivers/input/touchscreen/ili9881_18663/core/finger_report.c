@@ -595,9 +595,9 @@ static int finger_report_ver_5_0(void)
 		res = ilitek_get_gesture_info(gesture_report_data);
 		if(res)
 			{
-			input_report_key(core_fr->input_device, KEY_F4, 1);
+			input_report_key(core_fr->input_device, KEY_WAKEUP, 1);
 			input_sync(core_fr->input_device);
-			input_report_key(core_fr->input_device, KEY_F4, 0);
+			input_report_key(core_fr->input_device, KEY_WAKEUP, 0);
 			input_sync(core_fr->input_device);
 			}
 		goto out;
@@ -999,6 +999,7 @@ void core_fr_input_set_param(struct input_dev *input_device)
 	set_bit(EV_KEY, core_fr->input_device->evbit);
 	set_bit(BTN_TOUCH, core_fr->input_device->keybit);
 	set_bit(BTN_TOOL_FINGER, core_fr->input_device->keybit);
+	set_bit(KEY_WAKEUP, core_fr->input_device->keybit);
 	set_bit(INPUT_PROP_DIRECT, core_fr->input_device->propbit);
 
 	if (core_fr->isSetResolution) {

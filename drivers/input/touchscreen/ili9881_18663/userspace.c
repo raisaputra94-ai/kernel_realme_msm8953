@@ -1411,9 +1411,11 @@ static ssize_t ilitek_proc_gesture_write(struct file *filp, const char *buff, si
 	if (strcmp(cmd, "on") == 0) {
 		ipio_info("enable gesture mode\n");
 		core_config->isEnableGesture = true;
+		g_gesture = 1;
 	} else if (strcmp(cmd, "off") == 0) {
 		ipio_info("disable gesture mode\n");
 		core_config->isEnableGesture = false;
+		g_gesture = 0;
 	} else
 		ipio_err("Unknown command\n");
 

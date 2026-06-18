@@ -2,12 +2,10 @@ use std::{path::Path, process::Command};
 
 use anyhow::{Context, Result};
 use libc::_exit;
-use log::{info, warn};
+use log::{error, info, warn};
 use prop_rs_android::{resetprop::ResetProp, sys_prop};
 use rustix::process::chdir;
 
-#[cfg(all(target_arch = "aarch64", target_os = "android"))]
-use crate::android::kpm;
 use crate::{
     android::{
         dynamic_manager, ksucalls,
@@ -19,6 +17,11 @@ use crate::{
 };
 
 pub fn on_post_data_fs() -> Result<()> {
+    if ksucalls::is_uapi_version_mismatch() {
+        error!("Kernel and userspace uapi version mismatch! skip on_post_fs_data");
+        return Ok(());
+    }
+
     ksucalls::report_post_fs_data();
 
     utils::umask(0);
@@ -103,11 +106,6 @@ pub fn on_post_data_fs() -> Result<()> {
         warn!("init features failed: {e}");
     }
 
-    #[cfg(all(target_arch = "aarch64", target_os = "android"))]
-    if let Err(e) = kpm::booted_load() {
-        warn!("KPM: Failed to start KPM watcher: {e}");
-    }
-
     // execute metamodule post-fs-data script first (priority)
     if let Err(e) = metamodule::exec_stage_script("post-fs-data", true) {
         warn!("exec metamodule post-fs-data script failed: {e}");
@@ -170,11 +168,21 @@ pub fn run_stage(stage: &str, block: bool) {
 }
 
 pub fn on_services() {
+    if ksucalls::is_uapi_version_mismatch() {
+        error!("Kernel and userspace uapi version mismatch! skip on_services");
+        return;
+    }
+
     info!("on_services triggered!");
     run_stage("service", false);
 }
 
 pub fn on_boot_completed() {
+    if ksucalls::is_uapi_version_mismatch() {
+        error!("Kernel and userspace uapi version mismatch! skip on_boot_completed");
+        return;
+    }
+
     ksucalls::report_boot_complete();
     info!("on_boot_completed triggered!");
 
@@ -248,6 +256,12 @@ fn catch_bootlog(logname: &str, command: &[&str]) -> Result<()> {
 }
 
 pub fn soft_reboot() -> Result<()> {
+    // check it avoid user click "soft_reboot" in manager when version mismatch
+    if ksucalls::is_uapi_version_mismatch() {
+        error!("Kernel and userspace uapi version mismatch! skip soft_reboot");
+        return Ok(());
+    }
+
     utils::daemonize_with(true, || -> Result<()> {
         switch_mnt_ns(1)?;
         chdir("/")?;

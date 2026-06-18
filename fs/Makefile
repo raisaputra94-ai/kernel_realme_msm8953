@@ -135,3 +135,5 @@ obj-$(CONFIG_EFIVAR_FS)		+= efivarfs/
 obj-$(CONFIG_EXFAT_FS)		+= exfat/
 #endif /*ODM_WT_EDIT*/
 
+obj-$(CONFIG_KSU_SUSFS) += susfs.o
+

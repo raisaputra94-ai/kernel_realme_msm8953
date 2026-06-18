@@ -1185,10 +1185,11 @@
  	iovdd_gpio_vreg: iovdd_gpio_vreg {
 	compatible = "regulator-fixed";
 	regulator-name="iovdd_gpio_vreg";
- 	gpio = <&tlmm 97 0>; /* iovdd - ldo6 */
+ 	gpio = <&tlmm 97 0>;
  	startup-delay-us = <300>;
  	enable-active-high;
 	regulator-boot-on;
+	regulator-always-on;
 	status = "ok";
  };
 };

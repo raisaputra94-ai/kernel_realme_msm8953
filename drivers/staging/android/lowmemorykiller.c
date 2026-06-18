@@ -88,18 +88,22 @@ module_param_named(enable_lmk, enable_lmk, int, 0644);
 
 static u32 lowmem_debug_level = 1;
 static short lowmem_adj[6] = {
-	0,
-	1,
-	6,
-	12,
+    0,
+    1,
+    6,
+    12,
+    13,
+    15,
 };
 
 static int lowmem_adj_size = 4;
-static int lowmem_minfree[6] = {
-	3 * 512,	/* 6MB */
-	2 * 1024,	/* 8MB */
-	4 * 1024,	/* 16MB */
-	16 * 1024,	/* 64MB */
+static int lowmem_minfree[] = {
+        3072,   // 12MB  foreground
+    4096,   // 16MB
+    6144,   // 24MB
+    10240,  // 40MB
+    15360,  // 60MB
+    20480,  // 80MB  background
 };
 
 static int lowmem_minfree_size = 4;
