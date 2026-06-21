@@ -559,6 +559,7 @@ struct dentry *devpts_pty_new(struct pts_fs_info *fsi, int index, void *priv)
 	return dentry;
 }
 
+
 /**
  * devpts_get_priv -- get private data for a slave
  * @pts_inode: inode of the slave

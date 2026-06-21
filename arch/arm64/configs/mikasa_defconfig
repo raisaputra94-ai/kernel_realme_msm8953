@@ -887,3 +887,6 @@ CONFIG_BLK_DEV_THROTTLING=y
 
 # PSI always on (needed by LMKD for accurate memory pressure)
 # CONFIG_PSI_DEFAULT_DISABLED is not set
+CONFIG_KSU_MANUAL_HOOK=y
+# CONFIG_KSU_KPROBES_HOOK is not set
+# CONFIG_KSU_SUSFS_TRY_UMOUNT is not set

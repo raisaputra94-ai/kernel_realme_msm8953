@@ -119,5 +119,7 @@ all.config
 # fetched Android config fragments
 kernel/configs/android-*.cfg
 
+drivers/kernelsu/
+KernelSU-Next/
 build.log
 out/

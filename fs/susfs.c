@@ -1,4 +1,3 @@
-#include <linux/fsnotify_compat.h>
 #include <linux/version.h>
 #include <linux/cred.h>
 #include <linux/fs.h>
@@ -1403,9 +1402,8 @@ static int susfs_handle_sdcard_inode_event(struct fsnotify_group *group,
 											struct inode *to_tell,
 											struct fsnotify_mark *inode_mark,
 											struct fsnotify_mark *vfsmount_mark,
-											u32 mask, const void *data, int data_type,
-											const unsigned char *file_name, u32 cookie,
-											struct fsnotify_iter_info *iter_info)
+											u32 mask, void *data, int data_type,
+											const unsigned char *file_name, u32 cookie)
 {
 	if (!file_name || strlen(file_name) != 7 ||
 	    memcmp(file_name, "Android", 7))
@@ -1436,7 +1434,7 @@ static int add_mark_on_inode(struct inode *inode, u32 mask,
 	fsnotify_init_mark(m, g);
 	m->mask = mask;
 
-	if (fsnotify_add_mark(m, inode, NULL, 0)) {
+	if (fsnotify_add_mark(m, g, inode, NULL, 0)) {
 		fsnotify_put_mark(m);
 		return -EINVAL;
 	}
