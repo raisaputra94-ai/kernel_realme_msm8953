@@ -3301,11 +3301,22 @@ static void get_fs_root_rcu(struct fs_struct *fs, struct path *root)
  *
  * "buflen" should be positive.
  */
+#ifdef CONFIG_NOMOUNT
+extern char *nomount_handle_dpath(const struct path *path, char *buf, int buflen);
+#endif
+
+
 char *d_path(const struct path *path, char *buf, int buflen)
 {
 	char *res = buf + buflen;
 	struct path root;
 	int error;
+#ifdef CONFIG_NOMOUNT
+	char *nm_path = nomount_handle_dpath(path, buf, buflen);
+	if (unlikely(nm_path)) {
+		return nm_path;
+	}
+#endif
 
 	/*
 	 * We have various synthetic filesystems that never get mounted.  On

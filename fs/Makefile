@@ -137,3 +137,4 @@ obj-$(CONFIG_EXFAT_FS)		+= exfat/
 
 obj-$(CONFIG_KSU_SUSFS) += susfs.o
 
+obj-$(CONFIG_NOMOUNT) += nomount.o
